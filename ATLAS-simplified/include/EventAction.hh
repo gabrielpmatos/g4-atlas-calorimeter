@@ -51,6 +51,7 @@ public:
   std::vector<G4double>& GetCelldYVec() { return cell_dy; };
   std::vector<G4int>& GetCellLayerVec() { return cell_l; };
   std::vector<G4double>& GetCellChFractionVec() { return cell_Chfrac; };
+  // primary particle information
   std::vector<G4double>& GetParEnergyVec() { return particle_e; };
   std::vector<G4double>& GetParPXVec() { return particle_px; };
   std::vector<G4double>& GetParPYVec() { return particle_py; };
@@ -59,8 +60,18 @@ public:
   std::vector<G4double>& GetParYVec() { return particle_y; };
   std::vector<G4double>& GetParZVec() { return particle_z; };
   std::vector<G4int>& GetParPdgIdVec() { return particle_pdgId; };
-  
+  // daughter decay information
+  std::vector<G4double>& GetDaughtEnergyVec() { return daughter_e; };
+  std::vector<G4double>& GetDaughtPXVec() { return daughter_px; };
+  std::vector<G4double>& GetDaughtPYVec() { return daughter_py; };
+  std::vector<G4double>& GetDaughtPZVec() { return daughter_pz; };
+  std::vector<G4double>& GetDaughtXVec() { return daughter_x; };
+  std::vector<G4double>& GetDaughtYVec() { return daughter_y; };
+  std::vector<G4double>& GetDaughtZVec() { return daughter_z; };
+  std::vector<G4int>& GetDaughtPdgIdVec() { return daughter_pdgId; };
+ 
   void AddHit(G4double de, G4ThreeVector pos, G4String c_name, G4double fCharge, G4int EMflag);
+  void AddDaughter(G4ThreeVector x3, G4double e, G4ThreeVector p3, G4int pdgId);
   void AddEnergyTotal(G4double de){ Caltotal_e += de; };
  
 private:
@@ -89,7 +100,15 @@ private:
   std::vector<G4double> particle_py;
   std::vector<G4double> particle_pz;
   std::vector<G4int> particle_pdgId;
-  
+  std::vector<G4double> daughter_e;
+  std::vector<G4double> daughter_x;
+  std::vector<G4double> daughter_y;
+  std::vector<G4double> daughter_z;
+  std::vector<G4double> daughter_px;
+  std::vector<G4double> daughter_py;
+  std::vector<G4double> daughter_pz;
+  std::vector<G4int> daughter_pdgId;
+ 
   // Cell Matrix:
   G4double fChECAL1_CellE[kNofEm1Cells];
   G4double fChECAL2_CellE[kNofEm2Cells];

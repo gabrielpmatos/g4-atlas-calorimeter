@@ -54,6 +54,22 @@ CaloRSteppingAction::~CaloRSteppingAction()
 void CaloRSteppingAction::UserSteppingAction(const G4Step* step)
 {
 // Collect energy and track length step by step
+
+  // collect decay information
+  G4Track* track = step->GetTrack();
+  if (track->GetParentID() == 0 && track->GetDynamicParticle()->GetPDGcode() == 111)  //Is primary and a pion
+  {
+      G4TrackVector* fSecondary = fpSteppingManager->GetfSecondary();
+      for(size_t lp1=0; lp1<(*fSecondary).size(); lp1++)
+      {
+          G4Track* fSecondaryTrack = (*fSecondary)[lp1];
+          fEventAction->AddDaughter(fSecondaryTrack->GetPosition(), 
+                                    fSecondaryTrack->GetDynamicParticle()->GetTotalEnergy(),
+                                    fSecondaryTrack->GetDynamicParticle()->GetMomentum(),
+                                    fSecondaryTrack->GetDynamicParticle()->GetPDGcode());
+      };
+  };
+
   // energy deposit
   auto edep = step->GetTotalEnergyDeposit();
   edep -= step->GetNonIonizingEnergyDeposit(); // make difference of 0.5%
@@ -73,7 +89,7 @@ void CaloRSteppingAction::UserSteppingAction(const G4Step* step)
   if(touchable->GetVolume()->GetName().contains(fDetConstruction->absWord)) return;
   
   // Trace back to the initial particle:
-  G4Track * track( step->GetTrack() );
+  //G4Track * track( step->GetTrack() );
   CaloRTrackInformation *  trackInfo( static_cast< CaloRTrackInformation * >(track->GetUserInformation() ) );
   G4double fCharge = trackInfo->GetOriginCharge();
   
