@@ -170,6 +170,17 @@ void CaloREventAction::AddHit(G4double uncalib_de, G4ThreeVector pos,
   }
 }  
 
+void CaloREventAction::AddDaughter(G4ThreeVector x3, G4double e, G4ThreeVector p3, G4int pdgId)
+{
+  daughter_x.push_back(x3.x()/mm);
+  daughter_y.push_back(x3.y()/mm);
+  daughter_z.push_back(x3.z()/mm);
+  daughter_e.push_back(e/GeV);
+  daughter_px.push_back(p3.x()/GeV);
+  daughter_py.push_back(p3.y()/GeV);
+  daughter_pz.push_back(p3.z()/GeV);
+  daughter_pdgId.push_back(pdgId);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void CaloREventAction::BeginOfEventAction(const G4Event* event)
@@ -190,7 +201,15 @@ void CaloREventAction::BeginOfEventAction(const G4Event* event)
   particle_py.clear();
   particle_pz.clear();
   particle_pdgId.clear();
-  
+  daughter_x.clear();
+  daughter_y.clear();
+  daughter_z.clear();
+  daughter_e.clear();
+  daughter_px.clear();
+  daughter_py.clear();
+  daughter_pz.clear();
+  daughter_pdgId.clear();
+ 
   Caltotal_e = 0;
 
   for(G4int icopy = 0; icopy < kNofEm1Cells; icopy++){

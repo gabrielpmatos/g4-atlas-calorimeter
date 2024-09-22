@@ -109,7 +109,15 @@ void CaloRRunAction::BeginOfRunAction(const G4Run* myRun)
 	  analysisManager->CreateNtupleDColumn("particle_py",eventAction->GetParPYVec());  
 	  analysisManager->CreateNtupleDColumn("particle_pz",eventAction->GetParPZVec());  
 	  analysisManager->CreateNtupleIColumn("particle_pdgId",eventAction->GetParPdgIdVec());  
-	  analysisManager->FinishNtuple();
+	  analysisManager->CreateNtupleDColumn("daughter_e",eventAction->GetDaughtEnergyVec());  
+	  analysisManager->CreateNtupleDColumn("daughter_x",eventAction->GetDaughtXVec());  
+	  analysisManager->CreateNtupleDColumn("daughter_y",eventAction->GetDaughtYVec());  
+	  analysisManager->CreateNtupleDColumn("daughter_z",eventAction->GetDaughtZVec());  
+	  analysisManager->CreateNtupleDColumn("daughter_px",eventAction->GetDaughtPXVec());  
+	  analysisManager->CreateNtupleDColumn("daughter_py",eventAction->GetDaughtPYVec());  
+	  analysisManager->CreateNtupleDColumn("daughter_pz",eventAction->GetDaughtPZVec());  
+	  analysisManager->CreateNtupleIColumn("daughter_pdgId",eventAction->GetDaughtPdgIdVec());  
+          analysisManager->FinishNtuple();
   }
 
 }
