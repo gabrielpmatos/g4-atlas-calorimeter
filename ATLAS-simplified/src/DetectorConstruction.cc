@@ -125,7 +125,7 @@ G4VPhysicalVolume* CaloRDetectorConstruction::DefineVolumes()
   // G4double  calorThickness  = ...
 
   auto  worldSizeXY = 1.5 * calorSizeXY;
-  auto  worldSizeZ  = 1.2 * (calorThickness + GunDinsance); 
+  auto  worldSizeZ  = 1.2 * (calorThickness + 4* GunDinsance); 
   
   // Get materials
   auto defaultMaterial = G4Material::GetMaterial("Galactic");

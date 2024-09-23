@@ -51,8 +51,8 @@ public:
 
 private:
   G4ParticleGun* fParticleGun;
-  G4double Zinit = -1 * (GunDinsance + calorThickness)/2;
-
+  //G4double Zinit = -1 * (GunDinsance + calorThickness)/2;
+  G4double Zinit = -1 * (GunDinsance/2 + calorThickness); 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
