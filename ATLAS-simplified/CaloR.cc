@@ -153,6 +153,41 @@ int main(int argc, char** argv)
   G4DecayTable* fTable = new G4DecayTable();
   fTable->Insert(fMode);
   fParticleDef->SetDecayTable(fTable);
+
+  //Set Zd decay to e+e- pair
+  // See Athena (https://gitlab.cern.ch/atlas/athena/-/blob/main/Simulation/G4Extensions/ExtraParticles/src/CustomParticle.cxx
+  // and G4 docs: (https://apc.u-paris.fr/~franco/g4doxy/html/G4ParticleDefinition_8hh-source.html, 
+  //               https://geant4-userdoc.web.cern.ch/UsersGuides/ForApplicationDeveloper/html/TrackingAndPhysics/particle.html)
+  
+  G4double hbar = 6.582119514e-25; // GeV * s
+  G4String name = "Zd";
+  G4double mass = 1. * GeV;
+  G4double width = 1.04253e-10 * GeV; // from MadGraph log file (1 GeV dark photon)
+  G4double charge = 0.; // Neutral
+  G4int pdg = 32;
+  G4bool stable = false;
+  G4double lifetime = hbar / width; // s 
+
+  //    Arguments for constructor are as follows
+  //               name             mass          width         charge
+  //             2*spin           parity  C-conjugation
+  //          2*Isospin       2*Isospin3       G-parity
+  //               type    lepton number  baryon number   PDG encoding
+  //             stable         lifetime    decay table
+  //             shortlived      subType    anti_encoding
+
+  G4ParticleDefinition* fZdParticleDef = new G4ParticleDefinition(name, mass, width, charge,
+                                                          2,        0,     0,
+                                                          0,        0,     0,
+                                                          "darkphoton",        0,     0,    pdg,
+                                                          stable, lifetime,  NULL,
+                                                          true); // Short lived
+
+  G4VDecayChannel* fZdDecayMode =
+                  new G4PhaseSpaceDecayChannel("Zd",1,2,"e-","e+");
+  G4DecayTable* fZdTable = new G4DecayTable();
+  fZdTable->Insert(fZdDecayMode);
+  fZdParticleDef->SetDecayTable(fZdTable);                           
   
   // User Action classes
   auto actionInitialization = new CaloRActionInitialization(detector);
