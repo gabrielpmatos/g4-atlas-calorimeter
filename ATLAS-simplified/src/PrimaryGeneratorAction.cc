@@ -63,7 +63,7 @@ void CaloRPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   
   // If you whish to generate more particles
   // comment these lines and uncomment the next block
-  fParticleGun->SetParticleEnergy((10 + 40 * G4UniformRand() ) * GeV);
+  //fParticleGun->SetParticleEnergy((10 + 40 * G4UniformRand() ) * GeV);
   //fParticleGun->SetParticleEnergy(50 * GeV);
   fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., Zinit));
   fParticleGun->GeneratePrimaryVertex(anEvent);
