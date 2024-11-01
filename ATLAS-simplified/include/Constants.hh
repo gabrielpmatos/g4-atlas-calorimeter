@@ -49,7 +49,7 @@ constexpr G4double denPb  = 11.35*g/cm3, aPb = 207.19*g/mole, X0Pb = 5.612 * mm,
 constexpr G4double denLAr = 1.39*g/cm3, aLAr = 39.95*g/mole, X0LAr = 14.065 * cm, LintLAr = 86.078 * cm;
 constexpr G4double denFe  = 7.87*g/cm3, aFe = 55.85*g/mole, X0Fe = 1.759 * cm, LintFe = 16.999 * cm;
 constexpr G4double denSci  = 1.032*g/cm3, X0Sci = 42.544 * cm, LintSci = 69.969 * cm;
-
+constexpr G4double X0Al = 8.9 * cm;
 
 //ECAL (use Pb-LAr mix with 1.5:4.5 ratio)
 constexpr G4double  dECAL_abs = 1.5*mm, dECAL_gap = 4.5*mm;
@@ -95,6 +95,10 @@ constexpr G4double HCALThickness = HCAL1_dz + HCAL2_dz + HCAL3_dz;
 
 constexpr G4double calorSizeXY = dR_01*16; // to cover dR  = 0.8 should be 16
 constexpr G4double calorThickness = ECALThickness + HCALThickness;
+
+// Dead material geometry
+constexpr G4double supportX0 = 2.5;
+constexpr G4double supportThickness = supportX0 * X0Al;
 
 // Particle Gun possition
 constexpr G4double GunDinsance = 150.0 * cm;
