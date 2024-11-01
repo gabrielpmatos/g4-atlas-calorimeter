@@ -43,6 +43,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4GlobalMagFieldMessenger.hh"
 #include "G4AutoDelete.hh"
+#include "G4Region.hh"
 
 #include "DetectorConstruction.hh"
 #include "CellParameterisation.hh"
@@ -106,7 +107,10 @@ void CaloRDetectorConstruction::DefineMaterials()
   // Basic elements:
   G4Element* elH  = nistManager->FindOrBuildElement(1);
   G4Element* elC  = nistManager->FindOrBuildElement(6);
-  
+
+  // Aluminum
+  new G4Material("Aluminum", z=13., a=26.98*g/mole, density=2.7*g/cm3);
+
   //Compounds
   G4Material* Sci = new G4Material("Scintillator", density= 1.032*g/cm3, ncomponents=2);
   Sci->AddElement(elC, natoms=9);
@@ -129,12 +133,13 @@ G4VPhysicalVolume* CaloRDetectorConstruction::DefineVolumes()
   
   // Get materials
   auto defaultMaterial = G4Material::GetMaterial("Galactic");
+  auto supportMaterial = G4Material::GetMaterial("Aluminum");
   auto ECALabs = G4Material::GetMaterial("G4_Pb");
   auto ECALgap = G4Material::GetMaterial("G4_lAr");
   auto HCALabs = G4Material::GetMaterial("G4_Fe");
   auto HCALgap = G4Material::GetMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
   
-  if ( ! defaultMaterial || ! HCALabs || ! HCALgap || ! ECALabs || ! ECALgap ) {
+  if ( ! defaultMaterial || ! supportMaterial || ! HCALabs || ! HCALgap || ! ECALabs || ! ECALgap ) {
     G4ExceptionDescription msg;
     msg << "Cannot retrieve materials already defined."; 
     G4Exception("CaloRDetectorConstruction::DefineVolumes()",
@@ -173,6 +178,28 @@ G4VPhysicalVolume* CaloRDetectorConstruction::DefineVolumes()
                  fCheckOverlaps
     );
 
+  //
+  // Dead/support material
+  //
+
+  auto supportS = new G4Box("Support", calorSizeXY/2, calorSizeXY/2, supportThickness/2);  
+
+  auto supportLV = new G4LogicalVolume(supportS, supportMaterial, "Support");
+
+  new G4PVPlacement(
+                0,              // no rotation
+                G4ThreeVector(0, 0, ((GunDinsance-calorThickness)/2 - calorThickness/2 - supportThickness/2)), // Calo center - half of calo - half of support
+                supportLV,      // logical volume
+                "Support",      // name
+                worldLV,        // parent volume
+                false,          // no boolean operation
+                0,              // copy number
+                fCheckOverlaps  // check overlaps
+  );
+
+  G4Region* supportRegion = new G4Region("SupportRegion");
+  supportRegion->AddRootLogicalVolume(supportLV);
+
   //                               
   // Calorimeters
   //
@@ -205,7 +232,7 @@ G4VPhysicalVolume* CaloRDetectorConstruction::DefineVolumes()
                  ECALS,    // its solid
                  defaultMaterial, // its material
                  "ECALLV");  // its name
-                                   
+
   new G4PVPlacement(
                  0,                // no rotation
                  G4ThreeVector(0., 0., -HCALThickness/2),  // its position
@@ -215,7 +242,11 @@ G4VPhysicalVolume* CaloRDetectorConstruction::DefineVolumes()
                  false,            // no boolean operation
                  0,                // copy number
                  fCheckOverlaps);  // checking overlaps 
-				 
+
+  // ** Regions for debugging matScan
+  G4Region* ECALRegion = new G4Region("ECALRegion");
+  ECALRegion->AddRootLogicalVolume(ECALLV);
+
   //                                 
   // ECAL Layers
   //
@@ -340,7 +371,11 @@ G4VPhysicalVolume* CaloRDetectorConstruction::DefineVolumes()
                  false,            // no boolean operation
                  0,                // copy number
                  fCheckOverlaps);  // checking overlaps 
-  
+
+  // ** Regions for debugging matScan
+  G4Region* HCALRegion = new G4Region("HCALRegion");
+  HCALRegion->AddRootLogicalVolume(HCALLV);
+
   //                                 
   // HCAL Layers
   //
