@@ -42,7 +42,7 @@ class G4Run;
 class CaloRRunAction : public G4UserRunAction
 {
   public:
-    CaloRRunAction();
+    CaloRRunAction(G4String);
     virtual ~CaloRRunAction();
 
     virtual void BeginOfRunAction(const G4Run*);

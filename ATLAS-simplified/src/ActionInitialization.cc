@@ -36,8 +36,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-CaloRActionInitialization::CaloRActionInitialization(CaloRDetectorConstruction* detConstruction)
- : G4VUserActionInitialization(), fDetConstruction(detConstruction)
+CaloRActionInitialization::CaloRActionInitialization(G4String outFile, CaloRDetectorConstruction* detConstruction)
+ : G4VUserActionInitialization(), fDetConstruction(detConstruction), fOutFile(outFile)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,7 +49,7 @@ CaloRActionInitialization::~CaloRActionInitialization()
 
 void CaloRActionInitialization::BuildForMaster() const
 {
-  SetUserAction(new CaloRRunAction);
+  SetUserAction(new CaloRRunAction(fOutFile));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,7 +57,7 @@ void CaloRActionInitialization::BuildForMaster() const
 void CaloRActionInitialization::Build() const
 {
   SetUserAction(new CaloRPrimaryGeneratorAction);
-  SetUserAction(new CaloRRunAction);
+  SetUserAction(new CaloRRunAction(fOutFile));
   auto eventAction = new CaloREventAction;
   SetUserAction(eventAction);
   //SetUserAction(new CaloRStackingAction);

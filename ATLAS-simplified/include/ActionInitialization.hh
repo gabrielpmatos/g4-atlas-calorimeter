@@ -31,6 +31,7 @@
 #define CaloRActionInitialization_h 1
 
 #include "G4VUserActionInitialization.hh"
+#include "G4String.hh"
 
 class CaloRDetectorConstruction;
 
@@ -40,7 +41,7 @@ class CaloRDetectorConstruction;
 class CaloRActionInitialization : public G4VUserActionInitialization
 {
   public:
-    CaloRActionInitialization(CaloRDetectorConstruction*);
+    CaloRActionInitialization(G4String, CaloRDetectorConstruction*);
     virtual ~CaloRActionInitialization();
 
     virtual void BuildForMaster() const;
@@ -48,6 +49,7 @@ class CaloRActionInitialization : public G4VUserActionInitialization
 	
   private:
 	CaloRDetectorConstruction* fDetConstruction;
+        G4String fOutFile;
 };
 
 #endif

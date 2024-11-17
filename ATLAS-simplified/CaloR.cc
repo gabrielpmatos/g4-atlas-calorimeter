@@ -62,7 +62,7 @@
 namespace {
   void PrintUsage() {
     G4cerr << " Usage: " << G4endl;
-    G4cerr << " CaloR [-m macro ] [-u UIsession] [-s seedNumber] [-t nThreads]" << G4endl;
+    G4cerr << " CaloR [-o outFile] [-m macro] [-u UIsession] [-s seedNumber] [-t nThreads]" << G4endl;
     G4cerr << "   note: -t option is available only for multi-threaded mode."
            << G4endl;
   }
@@ -73,7 +73,7 @@ int main(int argc, char** argv)
 	
   // Evaluate arguments
   //
-  if ( argc > 7 ) {
+  if ( argc > 9 ) {
     PrintUsage();
     return 1;
   }
@@ -81,13 +81,15 @@ int main(int argc, char** argv)
   G4long seed = (long) time(NULL);
   G4String macro;
   G4String session;
+  G4String outFile = "CaloResponce.root"; // Default
   #ifdef G4MULTITHREADED
   G4int nThreads = 0;
   #endif
   for ( G4int i=1; i<argc; i=i+2 ) {
-    if      ( G4String(argv[i]) == "-m" ) macro = argv[i+1];
+    if      ( G4String(argv[i]) == "-o" ) outFile = argv[i+1];
+    else if ( G4String(argv[i]) == "-m" ) macro = argv[i+1];
     else if ( G4String(argv[i]) == "-u" ) session = argv[i+1];
-	else if ( G4String(argv[i]) == "-s" ) {
+    else if ( G4String(argv[i]) == "-s" ) {
       seed = G4UIcommand::ConvertToInt(argv[i+1]);
 	  G4cout << "Using user random seed = " <<  seed  << G4endl;
     }	
@@ -190,7 +192,7 @@ int main(int argc, char** argv)
   fZdParticleDef->SetDecayTable(fZdTable);                           
   
   // User Action classes
-  auto actionInitialization = new CaloRActionInitialization(detector);
+  auto actionInitialization = new CaloRActionInitialization(outFile, detector);
   runManager->SetUserInitialization(actionInitialization);
 
   // Initialize for ParticleGun settings

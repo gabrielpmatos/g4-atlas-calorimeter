@@ -38,7 +38,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-CaloRRunAction::CaloRRunAction()
+CaloRRunAction::CaloRRunAction(G4String outFile)
  : G4UserRunAction() 
 { 
   // set printing event number per each event
@@ -53,8 +53,8 @@ CaloRRunAction::CaloRRunAction()
   analysisManager->SetNtupleMerging(true);
     // Note: merging ntuples is available only with Root output
 
-  G4String fileName = "CaloResponce";
-  analysisManager->SetFileName(fileName);  
+  //G4String fileName = "CaloResponce";
+  analysisManager->SetFileName(outFile);  
 
 }
 
