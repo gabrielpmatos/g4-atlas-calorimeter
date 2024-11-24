@@ -62,7 +62,7 @@
 namespace {
   void PrintUsage() {
     G4cerr << " Usage: " << G4endl;
-    G4cerr << " CaloR [-o outFile] [-m macro] [-u UIsession] [-s seedNumber] [-t nThreads]" << G4endl;
+    G4cerr << " CaloR [-o outFile] [-m macro] [-a alpMass] [-u UIsession] [-s seedNumber] [-t nThreads]" << G4endl;
     G4cerr << "   note: -t option is available only for multi-threaded mode."
            << G4endl;
   }
@@ -82,12 +82,14 @@ int main(int argc, char** argv)
   G4String macro;
   G4String session;
   G4String outFile = "CaloResponce.root"; // Default
+  G4double alpMass = 0.1 * GeV;
   #ifdef G4MULTITHREADED
   G4int nThreads = 0;
   #endif
   for ( G4int i=1; i<argc; i=i+2 ) {
     if      ( G4String(argv[i]) == "-o" ) outFile = argv[i+1];
     else if ( G4String(argv[i]) == "-m" ) macro = argv[i+1];
+    else if ( G4String(argv[i]) == "-a" ) alpMass = G4UIcommand::ConvertToDouble(argv[i+1]) * GeV;
     else if ( G4String(argv[i]) == "-u" ) session = argv[i+1];
     else if ( G4String(argv[i]) == "-s" ) {
       seed = G4UIcommand::ConvertToInt(argv[i+1]);
@@ -190,7 +192,24 @@ int main(int argc, char** argv)
   G4DecayTable* fZdTable = new G4DecayTable();
   fZdTable->Insert(fZdDecayMode);
   fZdParticleDef->SetDecayTable(fZdTable);                           
-  
+
+  // ALP definition
+  name = "ALP";
+  mass = alpMass;
+  pdg = 51;
+  G4ParticleDefinition* fALPParticleDef = new G4ParticleDefinition(name, mass, width, charge,
+                                                          2,        0,     0,
+                                                          0,        0,     0,
+                                                          "darkphoton",        0,     0,    pdg,
+                                                          stable, lifetime,  NULL,
+                                                          true); // Short lived
+
+  G4VDecayChannel* fALPDecayMode =
+                  new G4PhaseSpaceDecayChannel("ALP",1,2,"gamma","gamma");
+  G4DecayTable* fALPTable = new G4DecayTable();
+  fALPTable->Insert(fALPDecayMode);
+  fALPParticleDef->SetDecayTable(fALPTable);                           
+
   // User Action classes
   auto actionInitialization = new CaloRActionInitialization(outFile, detector);
   runManager->SetUserInitialization(actionInitialization);
