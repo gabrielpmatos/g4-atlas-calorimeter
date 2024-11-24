@@ -57,7 +57,8 @@ void CaloRSteppingAction::UserSteppingAction(const G4Step* step)
 
   // collect decay information
   G4Track* track = step->GetTrack();
-  if (track->GetParentID() == 0 && (track->GetDynamicParticle()->GetPDGcode() == 111 || track->GetDynamicParticle()->GetPDGcode() == 32))  //Is primary and a pion/Zd
+  if (track->GetParentID() == 0 && (track->GetDynamicParticle()->GetPDGcode() == 111 
+     || track->GetDynamicParticle()->GetPDGcode() == 32 || track->GetDynamicParticle()->GetPDGcode() == 51))  //Is primary and a pion/Zd/ALP
   {
       G4TrackVector* fSecondary = fpSteppingManager->GetfSecondary();
       for(size_t lp1=0; lp1<(*fSecondary).size(); lp1++)
