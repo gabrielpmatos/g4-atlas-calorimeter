@@ -117,7 +117,7 @@ void CaloREventAction::SetCellInfo(G4double e_ch, G4double e_nu, G4double * XY, 
   }    
 }
 
-void CaloREventAction::SetParInfo(G4ThreeVector x3, G4double e, G4ThreeVector p3, G4int pdgId)
+void CaloREventAction::SetParInfo(G4ThreeVector x3, G4double e, G4ThreeVector p3, G4double mass, G4int pdgId)
 {
   // Fill the corresponding vectors with the cell info
   particle_x.push_back(x3.x()/mm);
@@ -127,6 +127,7 @@ void CaloREventAction::SetParInfo(G4ThreeVector x3, G4double e, G4ThreeVector p3
   particle_px.push_back(p3.x()/GeV);
   particle_py.push_back(p3.y()/GeV);
   particle_pz.push_back(p3.z()/GeV);
+  particle_m.push_back(mass/GeV);
   particle_pdgId.push_back(pdgId);
   
 }  
@@ -200,6 +201,7 @@ void CaloREventAction::BeginOfEventAction(const G4Event* event)
   particle_px.clear();
   particle_py.clear();
   particle_pz.clear();
+  particle_m.clear();
   particle_pdgId.clear();
   daughter_x.clear();
   daughter_y.clear();
@@ -239,12 +241,19 @@ void CaloREventAction::BeginOfEventAction(const G4Event* event)
   
   // Get information about the primary particles (might change during the run?)
   G4int nVtx= event-> GetNumberOfPrimaryVertex();
+  // Should be 1 for G4ParticleGun
   for(auto i=0; i< nVtx; i++) {
 	  const G4PrimaryVertex* primaryVertex= event-> GetPrimaryVertex(i);
 	  auto nPar = primaryVertex->GetNumberOfParticle ();
+          // Should also be 1 in nominal case
 	  for(auto j=0; j< nPar; j++) {
 		auto particle = primaryVertex->GetPrimary(j);
-		SetParInfo(primaryVertex->GetPosition(), particle->GetTotalEnergy(), particle->GetMomentum(), particle->GetPDGcode());
+                // If ALP, set uniform varying mass
+                if (particle->GetPDGcode() == 51) { 
+                    particle->SetMass((0.05 + 2.45 * G4UniformRand()) * GeV);
+                };
+
+		SetParInfo(primaryVertex->GetPosition(), particle->GetTotalEnergy(), particle->GetMomentum(), particle->GetMass(), particle->GetPDGcode());
 	  }
   }
   

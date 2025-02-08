@@ -59,6 +59,7 @@ public:
   std::vector<G4double>& GetParXVec() { return particle_x; };
   std::vector<G4double>& GetParYVec() { return particle_y; };
   std::vector<G4double>& GetParZVec() { return particle_z; };
+  std::vector<G4double>& GetParMassVec() { return particle_m; };
   std::vector<G4int>& GetParPdgIdVec() { return particle_pdgId; };
   // daughter decay information
   std::vector<G4double>& GetDaughtEnergyVec() { return daughter_e; };
@@ -80,7 +81,7 @@ private:
                                           const G4Event* event) const;
   G4double GetSum(G4THitsMap<G4double>* hitsMap) const;
   void SetCellInfo(G4double e_ch, G4double e_nu, G4double *XY, CaloIdx l);
-  void SetParInfo(G4ThreeVector x3, G4double e, G4ThreeVector p3, G4int pdgId);
+  void SetParInfo(G4ThreeVector x3, G4double e, G4ThreeVector p3, G4double mass, G4int pdgId);
   G4double CalibrateCellEnergy(G4double de,G4String c_name,G4int EMflag);
 
   // data members                   
@@ -99,6 +100,7 @@ private:
   std::vector<G4double> particle_px;
   std::vector<G4double> particle_py;
   std::vector<G4double> particle_pz;
+  std::vector<G4double> particle_m;
   std::vector<G4int> particle_pdgId;
   std::vector<G4double> daughter_e;
   std::vector<G4double> daughter_x;
