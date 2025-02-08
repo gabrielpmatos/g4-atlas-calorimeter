@@ -66,7 +66,8 @@ void CaloRPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // NOTE: changing from energy to momentum for consistency
   fParticleGun->SetParticleMomentum((50 + 50 * G4UniformRand() ) * GeV);
   //fParticleGun->SetParticleEnergy(50 * GeV);
-  fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., Zinit));
+  // Smear the particles around four 2nd layer cells
+  fParticleGun->SetParticlePosition(G4ThreeVector((G4UniformRand()*72*mm) - (36*mm), (G4UniformRand()*36*mm) - (36*mm), Zinit));
   fParticleGun->GeneratePrimaryVertex(anEvent);
   
   // MultiParticles
