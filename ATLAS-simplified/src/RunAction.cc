@@ -51,6 +51,7 @@ CaloRRunAction::CaloRRunAction(G4String outFile)
   // Create directories 
   analysisManager->SetVerboseLevel(1);
   analysisManager->SetNtupleMerging(true);
+  analysisManager->SetNtupleRowWise(false, true);
     // Note: merging ntuples is available only with Root output
 
   //G4String fileName = "CaloResponce";

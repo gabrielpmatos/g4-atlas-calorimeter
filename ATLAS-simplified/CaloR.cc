@@ -32,11 +32,11 @@
 
 // TODO, include how to handle with row_wise_branch (for MT jobs)
 // https://gitlab.cern.ch/geant4/geant4/blob/master/examples/extended/medical/dna/microyz/plot.C
-//#ifdef G4MULTITHREADED
-//#include "G4MTRunManager.hh"
-//#else
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
-//#endif
+#endif
 #include "G4UImanager.hh"
 
 #include "QGSP_FTFP_BERT.hh"
@@ -120,14 +120,14 @@ int main(int argc, char** argv)
   CLHEP::HepRandom::setTheSeed(seed);
   G4cout << "Seed: " << CLHEP::HepRandom::getTheSeed() << G4endl;
 
-//  #ifdef G4MULTITHREADED
-//  G4MTRunManager * runManager = new G4MTRunManager;
-//  if ( nThreads > 0 ) { 
-//    runManager->SetNumberOfThreads(nThreads);
-//  }  
-//  #else
+  #ifdef G4MULTITHREADED
+  G4MTRunManager * runManager = new G4MTRunManager;
+  if ( nThreads > 0 ) { 
+    runManager->SetNumberOfThreads(nThreads);
+  }  
+  #else
   G4RunManager * runManager = new G4RunManager;
-//  #endif
+  #endif
   
   // Set mandatory initialization classes
   
