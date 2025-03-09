@@ -63,8 +63,7 @@ void CaloRPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   
   // If you whish to generate more particles
   // comment these lines and uncomment the next block
-  // NOTE: changing from energy to momentum for consistency
-  fParticleGun->SetParticleMomentum((50 + 250 * G4UniformRand() ) * GeV);
+  fParticleGun->SetParticleEnergy((50 + 250 * G4UniformRand() ) * GeV);
   //fParticleGun->SetParticleEnergy(50 * GeV);
   // Smear the particles around four 2nd layer cells
   fParticleGun->SetParticlePosition(G4ThreeVector((G4UniformRand()*72*mm) - (36*mm), (G4UniformRand()*72*mm) - (36*mm), Zinit));
