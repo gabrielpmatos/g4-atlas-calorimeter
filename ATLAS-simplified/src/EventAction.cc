@@ -250,7 +250,7 @@ void CaloREventAction::BeginOfEventAction(const G4Event* event)
 		auto particle = primaryVertex->GetPrimary(j);
                 // If ALP, set uniform varying mass
                 if (particle->GetPDGcode() == 51) { 
-                    particle->SetMass((0.01 + 0.49 * G4UniformRand()) * GeV);
+                    particle->SetMass((0.01 + 0.24 * G4UniformRand()) * GeV);
                 };
 
 		SetParInfo(primaryVertex->GetPosition(), particle->GetTotalEnergy(), particle->GetMomentum(), particle->GetMass(), particle->GetPDGcode());
